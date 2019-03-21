@@ -24,11 +24,7 @@ import java.io.IOException;
  * @Date 2017/8/24 14:04
  */
 public class AuthFilter extends OncePerRequestFilter {
-    //todo filter相关的知识 spring前置后置处理器
-    /**
-     * OncePerRequestFilter 顾名思义，实现此类的filter只会被执行一次
-     * 普通的filter可能被执行多次
-     */
+
     private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired
@@ -40,16 +36,8 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (request.getServletPath().equals("/" + jwtProperties.getAuthPath())) {
-            chain.doFilter(request, response);//过滤执行完毕，不执行此语句后续不会被执行
+            chain.doFilter(request, response);
             return;
-        }
-
-        String[] urls = jwtProperties.getIgnoreUrl().split(",");
-        for (int i = 0; i < urls.length; i++) {
-            if (request.getServletPath().startsWith(urls[i])) {
-                chain.doFilter(request, response);
-                return;
-            }
         }
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken = null;

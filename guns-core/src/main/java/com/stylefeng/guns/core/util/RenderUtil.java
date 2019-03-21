@@ -19,6 +19,8 @@ public class RenderUtil {
     /**
      * 渲染json对象
      */
+    //todo HttpServletResponse中的PrintWrite
+    //note
     public static void renderJson(HttpServletResponse response, Object jsonObject) {
         try {
             response.setContentType("application/json");
