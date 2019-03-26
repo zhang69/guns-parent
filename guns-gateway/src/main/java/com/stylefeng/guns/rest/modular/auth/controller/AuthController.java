@@ -25,8 +25,8 @@ import javax.annotation.Resource;
  */
 @RestController
 public class AuthController {
-
-    @Reference(interfaceClass = UserAPI.class)
+    //zzy 取消啓動檢查
+    @Reference(interfaceClass = UserAPI.class,check = false)
     private UserAPI userAPI;
 
     @Autowired
@@ -39,7 +39,7 @@ public class AuthController {
     @RequestMapping(value = "${jwt.auth-path}")
     public ResponseVo createAuthenticationToken(AuthRequest authRequest) {
         //这个地方用userId的目的是为了生成token
-        int useId = 3;//userAPI.login(authRequest.getUserName(), authRequest.getPassword());
+        int useId = userAPI.login(authRequest.getUserName(), authRequest.getPassword());
 
         if (useId != 0) {
             final String randomKey = jwtTokenUtil.getRandomKey();

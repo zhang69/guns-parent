@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>guns-gateway</name>
-    <description>guns REST服务器</description>
+    <description>Meeting院线的API网关服务</description>
 
     <parent>
         <groupId>com.stylefeng</groupId>
@@ -75,5 +75,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

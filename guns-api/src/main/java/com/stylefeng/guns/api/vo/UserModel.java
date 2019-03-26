@@ -1,9 +1,12 @@
 package com.stylefeng.guns.api.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by root on 19-3-21.
  */
-public class UserModel {
+public class UserModel implements Serializable{
+    //zzy 因为序列化没加调了1年
     private String username;
     private String password;
     private String email;

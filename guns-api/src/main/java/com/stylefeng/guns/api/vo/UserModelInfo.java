@@ -11,7 +11,7 @@ public class UserModelInfo implements Serializable{
     private String nickname;
     private String email;
     private String phone;
-    private int sex;
+    private Integer sex;
     private String birthday;
     private String lifeState;
     private String biography;
@@ -60,11 +60,11 @@ public class UserModelInfo implements Serializable{
         this.phone = phone;
     }
 
-    public int getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 

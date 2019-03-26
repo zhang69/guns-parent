@@ -5,7 +5,6 @@ import com.stylefeng.guns.api.UserAPI;
 import com.stylefeng.guns.api.vo.UserModel;
 import com.stylefeng.guns.api.vo.UserModelInfo;
 import com.stylefeng.guns.rest.common.CurrentUser;
-import com.stylefeng.guns.rest.modular.user.UserAPImp;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
-    @Reference(interfaceClass = UserAPImp.class)
+    @Reference(interfaceClass = UserAPI.class,check = false)
     private UserAPI userAPI;
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
@@ -50,11 +49,11 @@ public class UserController {
             return ResponseVo.serviceFailed("用户未登陆");
         }
     }
-    @RequestMapping(value = "getInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "uploadInfo",method = RequestMethod.POST)
     public ResponseVo updateUserInfo(UserModelInfo userModelInfo) {
         String userId = CurrentUser.getUserId();
         if (userId != null && !userId.trim().equals("")) {
-            if (userId.equals(userModelInfo.getUuid())) {
+            if (userId.equals(String.valueOf(userModelInfo.getUuid()))) {
                 UserModelInfo userModel = userAPI.updateUserModel(userModelInfo);
                 if (userModel != null) {
                     return ResponseVo.success(userModel);

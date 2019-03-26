@@ -8,7 +8,6 @@ import com.stylefeng.guns.api.vo.UserModelInfo;
 import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.rest.persistence.dao.MoocUserTMapper;
 import com.stylefeng.guns.rest.persistence.model.MoocUserT;
-import com.stylefeng.guns.rest.persistence.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,7 +57,7 @@ public class UserAPImp implements UserAPI {
         //用密文存储，防止密码被窃取
         user.setUserPwd(MD5Util.encrypt(userModel.getPassword()));
         Integer insert = moocUserTMapper.insert(user);
-        if (insert > 1) {
+        if (insert > 0) {
             return true;
         }
         return false;
@@ -88,12 +87,32 @@ public class UserAPImp implements UserAPI {
      */
     @Override
     public UserModelInfo getModelInfo(String uuid) {
-        UserModelInfo userModelInfo = new UserModelInfo();
+        // 根据主键查询用户信息 [MoocUserT]
         MoocUserT moocUserT = moocUserTMapper.selectById(uuid);
-        BeanUtils.copyProperties(moocUserT,userModelInfo);
-        userModelInfo.setBeginTime(date2Long(moocUserT.getBeginTime()));
-        userModelInfo.setUpdateTime(date2Long(moocUserT.getUpdateTime()));
-        return userModelInfo;
+        // 将MoocUserT转换UserInfoModel
+        UserModelInfo userInfoModel = do2UserInfo(moocUserT);
+        // 返回UserInfoModel
+        return userInfoModel;
+    }
+
+    private UserModelInfo do2UserInfo(MoocUserT moocUserT){
+        UserModelInfo userInfoModel = new UserModelInfo();
+
+        userInfoModel.setUuid(moocUserT.getUuid());
+        userInfoModel.setHeadAddress(moocUserT.getHeadUrl());
+        userInfoModel.setPhone(moocUserT.getUserPhone());
+        userInfoModel.setUpdateTime(moocUserT.getUpdateTime().getTime());
+        userInfoModel.setEmail(moocUserT.getEmail());
+        userInfoModel.setUsername(moocUserT.getUserName());
+        userInfoModel.setNickname(moocUserT.getNickName());
+        userInfoModel.setLifeState(""+moocUserT.getLifeState());
+        userInfoModel.setBirthday(moocUserT.getBirthday());
+        userInfoModel.setAddress(moocUserT.getAddress());
+        userInfoModel.setSex(moocUserT.getUserSex());
+        userInfoModel.setBeginTime(moocUserT.getBeginTime().getTime());
+        userInfoModel.setBiography(moocUserT.getBiography());
+
+        return userInfoModel;
     }
 
     public Long date2Long(Date date) {
@@ -106,20 +125,36 @@ public class UserAPImp implements UserAPI {
 
     /**
      * 更新用户信息
-     * @param userModelInfo
+     * @param userInfoModel
      * @return 更新后的值，要更新的值
      */
     @Override
-    public UserModelInfo updateUserModel(UserModelInfo userModelInfo) {
+    public UserModelInfo updateUserModel(UserModelInfo userInfoModel) {
+        // 将传入的参数转换为DO 【MoocUserT】
         MoocUserT moocUserT = new MoocUserT();
-        BeanUtils.copyProperties(userModelInfo, moocUserT);
-        //额外不同类型的属性之间的转化
-        moocUserT.setBeginTime(long2Date(userModelInfo.getBeginTime()));
-        moocUserT.setUpdateTime(long2Date(System.currentTimeMillis()));
+        moocUserT.setUuid(userInfoModel.getUuid());
+        moocUserT.setNickName(userInfoModel.getNickname());
+        moocUserT.setLifeState(Integer.parseInt(userInfoModel.getLifeState()));
+        moocUserT.setBirthday(userInfoModel.getBirthday());
+        moocUserT.setBiography(userInfoModel.getBiography());
+        moocUserT.setBeginTime(null);
+        moocUserT.setHeadUrl(userInfoModel.getHeadAddress());
+        moocUserT.setEmail(userInfoModel.getEmail());
+        moocUserT.setAddress(userInfoModel.getAddress());
+        moocUserT.setUserPhone(userInfoModel.getPhone());
+        moocUserT.setUserSex(userInfoModel.getSex());
+        moocUserT.setUpdateTime(null);
+
+        // DO存入数据库
         Integer integer = moocUserTMapper.updateById(moocUserT);
-        if (integer > 0) {
-            return getModelInfo(String.valueOf(moocUserT.getUuid()));
+        if(integer>0){
+            // 将数据从数据库中读取出来
+            UserModelInfo userInfo = getModelInfo(String.valueOf(moocUserT.getUuid()));
+            // 将结果返回给前端
+            return userInfo;
+        }else{
+            return null;
         }
-        return userModelInfo;
     }
+
 }
