@@ -58,6 +58,7 @@ public class FilmServiceImpl implements FilmServiceApi {
         EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper();
         entityWrapper.eq("film_status","2");
         if (isLimit) {
+            //zzy mybatis plugs
             Page<MoocFilmT> page = new Page<>(1, nums);
             List<MoocFilmT> moocFilmTS = moocFilmTMapper.selectPage(page, entityWrapper);
             List<FilmInfo> filmInfos = getFilmInfos(moocFilmTS);
