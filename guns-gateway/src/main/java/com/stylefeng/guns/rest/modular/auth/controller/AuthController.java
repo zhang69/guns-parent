@@ -62,7 +62,7 @@ public class AuthController {
         /**
          * 2 StringUtils------apache下面
          */
-        boolean b1 = StringUtils.isEmpty("");
+        boolean b1 = StringUtils.isEmpty(" ");
         boolean b2 = StringUtils.isEmpty(null);
         System.out.println(b1);
         System.out.println(b2);
