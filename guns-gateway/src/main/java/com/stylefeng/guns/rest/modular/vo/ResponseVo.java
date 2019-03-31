@@ -1,63 +1,74 @@
 package com.stylefeng.guns.rest.modular.vo;
 
-/**
- * Created by root on 19-3-21.
- */
+import lombok.Data;
+
+@Data
 public class ResponseVo<M> {
+    // 返回状态【0-成功，1-业务失败，999-表示系统异常】
     private int status;
+    // 返回信息
     private String msg;
+    // 返回数据实体;
     private M data;
+    // 图片前缀
+    private String imgPre;
 
-    private ResponseVo() {
+    // 分页使用
+    private int nowPage;
+    private int totalPage;
 
+    private ResponseVo(){}
+
+    public static<M> ResponseVo success(int nowPage,int totalPage,String imgPre,M m){
+        ResponseVo ResponseVo = new ResponseVo();
+        ResponseVo.setStatus(0);
+        ResponseVo.setData(m);
+        ResponseVo.setImgPre(imgPre);
+        ResponseVo.setTotalPage(totalPage);
+        ResponseVo.setNowPage(nowPage);
+
+        return ResponseVo;
     }
-    //todo 泛型方法回顾
-    /**
-     * 泛型方法是为了解决一个问题
-     * 静态方法和静态代码块中不能使用T，泛型静态方法可以
-     */
 
-    /**
-     *
-     * @param msg 错误信息
-     * @param <M> 泛型类型
-     * @return 封装实例
-     */
-    public static<M> ResponseVo serviceFailed(String msg){
-        ResponseVo responseVo = new ResponseVo();
-        responseVo.setStatus(0);
-        responseVo.setMsg(msg);
-        return responseVo;
+    public static<M> ResponseVo success(String imgPre,M m){
+        ResponseVo ResponseVo = new ResponseVo();
+        ResponseVo.setStatus(0);
+        ResponseVo.setData(m);
+        ResponseVo.setImgPre(imgPre);
+
+        return ResponseVo;
     }
 
     public static<M> ResponseVo success(M m){
-        ResponseVo responseVo = new ResponseVo();
-        responseVo.setStatus(1);
-        responseVo.setData(m);
-        return responseVo;
+        ResponseVo ResponseVo = new ResponseVo();
+        ResponseVo.setStatus(0);
+        ResponseVo.setData(m);
+
+        return ResponseVo;
     }
 
-    public int getStatus() {
-        return status;
+    public static<M> ResponseVo success(String msg){
+        ResponseVo ResponseVo = new ResponseVo();
+        ResponseVo.setStatus(0);
+        ResponseVo.setMsg(msg);
+
+        return ResponseVo;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public static<M> ResponseVo serviceFail(String msg){
+        ResponseVo ResponseVo = new ResponseVo();
+        ResponseVo.setStatus(1);
+        ResponseVo.setMsg(msg);
+
+        return ResponseVo;
     }
 
-    public String getMsg() {
-        return msg;
+    public static<M> ResponseVo appFail(String msg){
+        ResponseVo ResponseVo = new ResponseVo();
+        ResponseVo.setStatus(999);
+        ResponseVo.setMsg(msg);
+
+        return ResponseVo;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public M getData() {
-        return data;
-    }
-
-    public void setData(M data) {
-        this.data = data;
-    }
 }

@@ -6,8 +6,9 @@ import com.stylefeng.guns.api.UserAPI;
 import com.stylefeng.guns.api.vo.UserModel;
 import com.stylefeng.guns.api.vo.UserModelInfo;
 import com.stylefeng.guns.core.util.MD5Util;
-import com.stylefeng.guns.rest.persistence.dao.MoocUserTMapper;
-import com.stylefeng.guns.rest.persistence.model.MoocUserT;
+
+import com.stylefeng.guns.rest.common.persistence.dao.MoocUserTMapper;
+import com.stylefeng.guns.rest.common.persistence.model.MoocUserT;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
